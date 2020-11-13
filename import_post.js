@@ -3,12 +3,16 @@ const {
   query
 } = require('graphqurl')
 
-axios.get('https://jsonplaceholder.typicode.com/posts/').then(res => console.log(res.data))
+axios.get('https://jsonplaceholder.typicode.com/users').then(res => {
+  const users = res.data
 
-// query({
-//   query: 'mutation { insert_post(objects: {body: "body01", id: 11, title: "titile01", userId: 1}) { returning {body title id userId}} }',
-//   endpoint: 'http://localhost:8080/v1/graphql',
-//   headers: {
-//     'x-access-key': 'postgrespassword',
-//   }
-// }).catch(err => console.log(err))
+  users.map(user => {
+    query({
+      query: `mutation { insert_user(objects: {id: ${user.id}, name: "${user.name}"}) { returning {id name}} }`,
+      endpoint: 'http://localhost:8080/v1/graphql',
+      headers: {
+        'x-access-key': 'postgrespassword',
+      }
+    }).catch(err => console.log(err.message))
+  })
+})
