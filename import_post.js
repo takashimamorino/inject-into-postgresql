@@ -3,9 +3,9 @@ const {
 } = require('graphqurl')
 
 query({
-  query: 'query { post_by_pk(id: 10) { userId title id userId } }',
+  query: 'mutation { insert_post(objects: {body: "body01", id: 11, title: "titile01", userId: 1}) { returning {body title id userId}} }',
   endpoint: 'http://localhost:8080/v1/graphql',
   headers: {
     'x-access-key': 'postgrespassword',
   }
-}).then((res) => console.log(res.data.post_by_pk))
+}).catch(err => console.log(err))
